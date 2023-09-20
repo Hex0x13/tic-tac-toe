@@ -1,144 +1,207 @@
-"use strict";
+const fields = document.querySelectorAll('.field');
+const xPlayerTurn = document.querySelector('.player-x');
+const oPlayerTurn = document.querySelector('.player-o');
+const replayButton = document.querySelector('.replay-button');
+const gameMessage = document.querySelector('.game-message');
 
-(function() {
-	function GameBoard(){
-		const DEFAULT_GAMEBOARD = ['', '', '', '', '', '', '', '', ''];
-		const WIN_COMBOS = [
-			[0, 1, 2],
-			[3, 4, 5],
-			[6, 7, 8],
-			[0, 4, 8],
-			[2, 4, 6],
-			[0, 3, 6],
-			[1, 4, 7],
-			[2, 5, 8]
-		];
+const WIN_COMBOS = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical
+    [0, 4, 8], [2, 4, 6]             // Diagonal
+];
+const LENGTH = 9;
+const message = {
+    'x': 'COMPUTER WIN!',
+    'o': 'PLAYER WIN!',
+    null: 'DRAW!'
+};
 
-		let gameBoard = DEFAULT_GAMEBOARD;
+let gameBoard = GameBoard();
+const computer = Player('x');
+const human = Player('o');
 
-		const checkBoard = (ply1, ply2) => {
-			const len = WIN_COMBOS.length;
-			for (let i = 0; i < len; i++) {
-				const win_indices = WIN_COMBOS[i];
-				if (win_indices.every(index => gameBoard[index] === ply1)){
-					return ply1;
-				} else if (win_indices.every(index => gameBoard[index] === ply2)){
-					return ply2;
-				}
-			}
-			if (gameBoard.every(field => field !== '')){
-				return 'draw';
-			}
-		}
+function GameBoard() {
+    let board = new Array(LENGTH);
 
-		const resetGameBoard = () => {
-			gameBoard = DEFAULT_GAMEBOARD;
-		};
+    const reset = () => { board = new Array(LENGTH) };
+    const set = (index, data) => {
+        if ((index >= 0 && index < board.length) &&
+            data === 'x' || data === 'o' || data === undefined)
+            board[index] = data;
+    };
+    const get = (index) => board[index];
+    const isBoardFull = () => {
+        for (let i = 0; i < LENGTH; i++) {
+            if (board[i] === undefined){
+                return false;
+            }
+        }
+        return true;
+    }
+    const checkWin = () => {
+        for (let i = 0; i < WIN_COMBOS.length; i++) {
+            const winIndices = WIN_COMBOS[i];
+            if (winIndices.every(i => board[i] === 'x')) {
+                return {index: i, sign: 'x'};
+            } else if (winIndices.every(i => board[i] === 'o')) {
+                return {index: i, sign: 'o'};
+            }
+        }
+        return null;
+    }
 
-		const getBoard = () => gameBoard;
+    return { reset, set, get, isBoardFull, checkWin };
+}
 
-		const getField = (index) => gameBoard[index];
+function Player (sign) {
+    const _sign = sign.toLowerCase();
+    const getSign = () => _sign;
+    return { getSign };
+}
 
-		const setField = (index, player) => {
-			if (gameBoard[index] === ''){
-				gameBoard[index] = player.getSign();
-			}
-		}
+function render() {
+    fields.forEach((field, index) => {
+        const item = gameBoard.get(index);
+        if (item !== undefined) {
+            field.textContent = item;
+            field.disabled = true;
+        } else {
+            field.textContent = '';
+            field.disabled = false;
+        }
+    })
+}
 
-		return {resetGameBoard, getBoard, getField, setField, checkBoard};
-	}
+function toggleTurn(turn) {
+    if (turn === 'x') {
+        xPlayerTurn.classList.remove('turn');
+        oPlayerTurn.classList.add('turn');
+    } else {
+        oPlayerTurn.classList.remove('turn');
+        xPlayerTurn.classList.add('turn');
+    }
+}
 
-	function Player(sign) {
-		let _sign = sign;
-		const getSign = () => _sign;
-		const setSign = (sign) => {
-			_sign = sign;
-		};
+function turn (player, index) {
+    gameBoard.set(index, player.getSign());
+    render();
+    toggleTurn(player.getSign());
+    const winner = gameBoard.checkWin();
+    if (winner !== null) gameOver(winner);
+    else if (gameBoard.isBoardFull()) gameOver(null);
+}
 
-		return { getSign, setSign };
-	}
+function playerClick(index) {
+    turn(human, index);
+    computerMove();
+}
 
-	function CurrentPlayerTurn(player1, player2){
-		const _player1 = player1;
-		const _player2 = player2;
-		let currentTurn = player1;
-		const get = () => currentTurn;
-		const toggle = () => {
-			if (currentTurn.getSign() === _player1.getSign()){
-				currentTurn = _player2;
-			} else {
-				currentTurn = _player1;
-			}
-		};
-		return {toggle, get};
-	}
+function minimax(board, depth, isMaxPlayer) {
+    const result = board.checkWin();
+    if (result !== null) {
+        if (result.sign === 'x'){
+            return 10 - depth;
+        } else {
+            return -10 + depth;
+        }
+    } else if (board.isBoardFull()){
+        return 0;
+    }
 
-	function displayContoller(){
-		const player1 = Player('x');
-		const player2 = Player('o');
-		let currentPlayerTurn = CurrentPlayerTurn(player1, player2);
-		const _gameFields = document.querySelectorAll('.field');
-		const player_x = document.querySelector('.player-x');
-		const player_o = document.querySelector('.player-o');
-		const gameBoard = GameBoard();
+    if (isMaxPlayer) {
+        let bestScore = -Infinity;
+        for (let i = 0; i < LENGTH; i++) {
+            if (board.get(i) === undefined) {
+                board.set(i, 'x');
+                const score = minimax(board, depth + 1, false);
+                board.set(i, undefined);
+                bestScore = Math.max(bestScore, score);
+            }
+        }
+        return bestScore;
+    } else {
+        let bestScore = Infinity;
+        for (let i = 0; i < LENGTH; i++) {
+            if (board.get(i) === undefined) {
+                board.set(i, 'o');
+                const score = minimax(board, depth + 1, true);
+                board.set(i, undefined);
+                bestScore = Math.min(bestScore, score);
+            }
+        }
+        return bestScore;
+    }
+}
 
-		function checkWinner(){
-			const POP_UP_DELAY = 200;
-			const ply1 = player1.getSign();
-			const ply2 = player2.getSign();
-			const check = gameBoard.checkBoard(ply1, ply2);
+function findBestMove(board) {
+    let bestMove = -1;
+    let bestScore = -Infinity;
+    for (let i = 0; i < LENGTH; i++) {
+        if (board.get(i) === undefined) {
+            board.set(i, 'x');
+            const score = minimax(board, 0, false);
+            board.set(i, undefined);
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = i;
+            }
+        }
+    }
+    return bestMove;
+}
 
-			if (check === ply1){
-				setTimeout(
-					() => {
-						alert('player ' + ply1 + ' win!');
-					},
-					POP_UP_DELAY
-				);
-			} else if (check === ply2){
-				setTimeout(
-					() => {
-						alert('player ' + ply2 + ' win!');
-					},
-					POP_UP_DELAY
-				);
-			} else if (check === 'draw'){
-				setTimeout(
-					() => {
-						alert('Draw!');
-					},
-					POP_UP_DELAY
-				);
-			}
-		}
+function computerMove() {
+    if (gameBoard.checkWin() === null && !gameBoard.isBoardFull()) {
+        disableFields();
+        let index = findBestMove(gameBoard);
+        setTimeout(() => turn(computer, index), 1500);
+    }
+}
 
-		function render() {
-			_gameFields.forEach((field, index) => {
-				field.textContent = gameBoard.getBoard()[index];
-				if (field.textContent !== ''){
-					field.disabled = true;
-				}
-			});
-		}
+function disableFields() {
+    fields.forEach(field => {
+        field.disabled = true;
+    });
+}
 
-		function playerMove(index){
-			const sign = currentPlayerTurn.get();
-			gameBoard.setField(index, sign);
-			render();
-			if (sign.getSign() === player1.getSign()){
-				player_x.classList.add('turn');
-				player_o.classList.remove('turn');
-			} else {
-				player_o.classList.add('turn');
-				player_x.classList.remove('turn');
-			}
-			checkWinner();
-			currentPlayerTurn.toggle();
-		}
+function gameStart() {
+    fields.forEach(field => field.classList.remove('win-box'));
+    gameBoard.reset();
+    render();
+    toggleTurn('o');
+    computerMove();
+}
 
-		_gameFields.forEach((field, index) => {
-			field.addEventListener('click', playerMove.bind(field, index));
-		});
-	}
-	displayContoller();
-})();
+function gameOver(winner) {
+    disableFields();
+    if (winner) {
+        gameMessage.textContent = message[winner.sign];
+        WIN_COMBOS[winner.index].forEach(index => {
+            fields[index].classList.add('win-box');
+        });
+    } else {
+        gameMessage.textContent = message[winner];
+        fields.forEach(field => {
+            field.classList.add('win-box');
+        });
+    }
+
+    gameMessage.classList.add('show');
+}
+
+
+function displayerController() {
+    fields.forEach((field, index) => {
+        field.addEventListener('click', playerClick.bind(field, index));
+    });
+    gameMessage.addEventListener('animationend', () =>
+        setTimeout(() =>
+            gameMessage.classList.remove('show'),
+            500
+        )
+    );
+    replayButton.onclick = gameStart;
+    computerMove();
+    toggleTurn('o');
+}
+ displayerController();

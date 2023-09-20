@@ -2,19 +2,17 @@ html, *, *::after, *::before {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  color: black;
+  color: rgb(44, 44, 44);
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-select: none;
   font-family: 'Courier New', Courier, monospace;
   font-weight: 500;
 }
 
 :root {
-  --field-border: 1px solid rgb(0, 0, 0);
+  --field-border: 1px solid rgb(44, 44, 44);
   --field-size: 120px;
-  --cba-border-color-1: rgb(247, 165, 73);
-  --cba-border-color-2: rgb(235, 74, 141);
-  --cba-border-color-3: rgb(196, 90, 245);
-  --cba-border-color-4: rgb(90, 126, 245);
 }
 
 body {
@@ -31,10 +29,12 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: rgb(151, 43, 240);
+  background-image: linear-gradient(to right, rgb(43, 240, 158), rgb(43, 201, 240));
   padding: 10px;
   height: 600px;
   width: 600px;
+  border-radius: 10px;
 }
 
 .player-turn {
@@ -44,15 +44,20 @@ body {
 }
 
 .player-turn > * {
-  font-size: 48px;
+  font-size: 32px;
   font-weight: 700;
-  border-bottom: 3px solid transparent;
-  padding: 10px;
+  padding: 5px;
   transition: all 500ms;
+  border: 3px solid transparent;
+  box-shadow: 0 0 0 1px rgb(32, 36, 36);
+  border-radius: 4px;
+  width: 150px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .turn {
-  border-bottom: 3px solid black;
+  border: 3px solid rgb(32, 36, 36);
 }
 
 .gameboard {
@@ -69,6 +74,7 @@ body {
   border-right: var(--field-border);
   cursor: pointer;
   font-size: 64px;
+  transition: all 500ms;
 }
 
 .field:disabled{
@@ -86,11 +92,50 @@ body {
 .replay-button {
   margin: 10px 0;
   font-size: 20px;
-  border: 1px solid black;
+  border: var(--field-border);
   padding: 5px;
   border-radius: 4px;
+  cursor: pointer;
+  background-color: rgb(69, 222, 233);
+  font-weight: 900;
 }
 
-.hide {
+.game-message {
+  position: fixed;
+  background: black;
+  font-size: 72px;
+  font-weight: 900;
+  background-image: linear-gradient(rgb(99, 22, 82), rgb(57, 15, 97));
+  background-clip: text;
+  -moz-background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  transform: scaleX(1);
+  transition: all 500ms;
   visibility: hidden;
+}
+
+.show {
+  visibility: visible;
+  animation: gameover 1s;
+}
+
+@keyframes gameover {
+  0% {
+    transform: scaleX(0.1);
+    filter: blur(5px);
+  }
+  50% {
+    transform: scaleX(0.5);
+    filter: blur(5px);
+  }
+  100% {
+    transform: scaleX(1);
+    filter: blur(0);
+  }
+
+}
+
+.win-box {
+  background-color: rgb(2, 199, 199);
 }
