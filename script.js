@@ -212,13 +212,16 @@ function GameController(player1Sign) {
             gameMessage.textContent = "It's a Tie!";
             gameController.tieCount += 1;
         }
-        winner.win_fields.forEach(i => {
+        const highlightFields = winner?.win_fields ||
+            Array.from(fields).map((e, i) => i);
+
+        highlightFields.forEach(i => {
             fields[i].classList.add('change-bg');
         });
 
         quitGameButton.removeEventListener('click', showMenu);
         setTimeout(() => {
-            winner.win_fields.forEach(i => {
+            highlightFields.forEach(i => {
                 fields[i].classList.remove('change-bg');
             });
             gameController.clearBoard();
