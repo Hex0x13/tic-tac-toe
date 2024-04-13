@@ -9,27 +9,75 @@
   <script src="./script.js" defer></script>
 </head>
 <body>
-  <main>
-    <div class="main-game">
-      <div class="player-turn">
-        <div class="player-x">X</div>
-        <div class="player-o">O</div>
+  <div class="select-symbol">
+    <div class="select-txt">Pick Your Sign</div>
+    <div class="symbol">
+      <div>
+        <input type="radio" id="ply-x" name="player-sign" value="x" checked>
+        <label class="radio-btn" for="ply-x">X</label>
       </div>
-      <div class="gameboard">
-        <button class="field"></button>
-        <button class="field"></button>
-        <button class="field no-right"></button>
-        <button class="field"></button>
-        <button class="field"></button>
-        <button class="field no-right"></button>
-        <button class="field no-bottom"></button>
-        <button class="field no-bottom"></button>
-        <button class="field no-bottom no-right"></button>
+      <div>
+        <input type="radio" id="ply-o" name="player-sign" value="o">
+        <label class="radio-btn" for="ply-o">O</label>
       </div>
-      <button class="replay-button">Replay</button>
     </div>
-  </main>
-  <div class="game-message">COMPUTER WIN&excl;</div>
-  <footer></footer>
+    <div class="difficulty">
+      <div>
+        <input type="radio" id="easy" name="difficulty" value="easy" checked>
+        <label class="radio-btn" for="easy">Easy</label>
+      </div>
+      <div>
+        <input type="radio" id="medium" name="difficulty" value="medium">
+        <label class="radio-btn" for="medium">Medium</label>
+      </div>
+      <div>
+        <input type="radio" id="hard" name="difficulty" value="hard">
+        <label class="radio-btn" for="hard">Hard</label>
+      </div>
+      <div>
+        <input type="radio" id="unbeatable" name="difficulty" value="unbeatable">
+        <label class="radio-btn" for="unbeatable">Unbeatable</label>
+      </div>
+    </div>
+    <button class="game-start-button">Start Game</button>
+  </div>
+
+  <div class="main-game hide">
+    <button class="quit-game button">x</button>
+    <div class="player-name-container">
+      <div class="player-name x">You</div>
+      <div class="player-name o">Computer</div>
+    </div>
+    <div class="player-turn">
+      <div class="player-x">X</div>
+      <div class="player-o">O</div>
+    </div>
+    <div class="gameboard">
+      <button class="field"></button>
+      <button class="field"></button>
+      <button class="field no-right"></button>
+      <button class="field"></button>
+      <button class="field"></button>
+      <button class="field no-right"></button>
+      <button class="field no-bottom"></button>
+      <button class="field no-bottom"></button>
+      <button class="field no-bottom no-right"></button>
+    </div>
+    <div class="gameboard-footer">
+      <div class="score x">0</div>
+      <div class="score tie">0</div>
+      <div class="score o">0</div>
+    </div>
+  </div>
+
+  <div class="overlay hide">
+    <div class="gameover">
+      <p class="message">It's a tie</p>
+      <div>
+        <button class="menu-button">Back to Menu</button>
+        <button class="next-round-button">Next Round</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
