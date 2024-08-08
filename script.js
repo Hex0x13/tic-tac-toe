@@ -195,9 +195,9 @@ function GameController(player1Sign) {
         document.querySelectorAll('.field').forEach(field => {
             field.textContent = '';
         });
-        scoreX.textContent = '0';
-        scoreO.textContent = '0';
-        scoreTie.textContent = '0';
+        scoreX.textContent = '-';
+        scoreO.textContent = '-';
+        scoreTie.textContent = '-';
     }
 
     const showGameResult = (winner) => {
@@ -213,7 +213,7 @@ function GameController(player1Sign) {
             gameController.tieCount += 1;
         }
         const highlightFields = winner?.win_fields ||
-            Array.from(fields).map((e, i) => i);
+            Array.from(fields).map((_, i) => i);
 
         highlightFields.forEach(i => {
             fields[i].classList.add('change-bg');
@@ -242,9 +242,9 @@ function GameController(player1Sign) {
             playerOScore = gameController.player1Score;
         }
 
-        scoreX.textContent = playerXScore;
-        scoreO.textContent = playerOScore;
-        scoreTie.textContent = gameController.tieCount;
+        scoreX.textContent = playerXScore || '-';
+        scoreO.textContent = playerOScore || '-';
+        // scoreTie.textContent = gameController.tieCount;
     }
 
     const gameStart = () => {

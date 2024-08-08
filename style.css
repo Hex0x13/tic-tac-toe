@@ -5,8 +5,8 @@
   --color-bg: rgb(32, 36, 36);
   --color-primary: rgb(43, 240, 158);
   --color-secondary: rgb(43, 201, 240);
-  --color-win: rgb(94, 246, 243);
-  --color-active: rgb(164, 107, 229);
+  --color-win: rgb(58, 241, 248);
+  --color-active: rgb(209, 79, 221);
   --color-symbol-bg: rgb(80, 79, 79);
   --color-score-bg: rgb(86, 214, 214);
   --color-score-label: rgb(59, 58, 58);
@@ -60,14 +60,16 @@ body {
 .player-turn > * {
   font-size: 32px;
   font-weight: 700;
-  padding: 5px;
+  padding: 5px 10px;
   transition: all 500ms;
   border: 3px solid transparent;
   box-shadow: 0 0 0 1px var(--color-bg);
   border-radius: 4px;
   width: 150px;
-  text-align: center;
+  text-align: left;
   margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .player-name-container {
@@ -199,14 +201,19 @@ input[type="radio"] {
 }
 
 .game-start-button {
-  font-size: 18px;
-  border-radius: 12px;
-  border: 1px solid black;
+  font-size: 22px;
+  border-radius: 8px;
+  border: none;
   padding: 10px;
   margin-top: 20px;
   background-color: transparent;
   color: black;
   cursor: pointer;
+  transition: transform 300ms ease-in-out;
+}
+
+.game-start-button:hover {
+  transform: scale(1.1);
 }
 
 .gameboard-footer {
@@ -215,36 +222,6 @@ input[type="radio"] {
   justify-content: center;
   gap: 1px;
 }
-
-.score {
-  margin-top: 32px;
-  max-width: 60px;
-  width: 60px;
-  text-align: center;
-  position: relative;
-  font-size: 18px;
-  font-weight: 700;
-  padding: 8px 0;
-}
-
-.score::before {
-  content: "";
-  max-width: 60px;
-  width: 60px;
-  text-align: center;
-  position: absolute;
-  right: -2px;
-  top: -16px;
-  font-size: 16px;
-  border-bottom: none;
-  font-weight: 700;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-
-.score.x::before { content: "x"; }
-.score.o::before { content: "o"; }
-.score.tie::before { content: "tie"; }
 
 .overlay {
   position: fixed;
