@@ -1,19 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+:root {
+  --color-text: rgb(44, 44, 44);
+  --color-bg: rgb(32, 36, 36);
+  --color-primary: rgb(43, 240, 158);
+  --color-secondary: rgb(43, 201, 240);
+  --color-win: rgb(94, 246, 243);
+  --color-active: rgb(164, 107, 229);
+  --color-symbol-bg: rgb(80, 79, 79);
+  --color-score-bg: rgb(86, 214, 214);
+  --color-score-label: rgb(59, 58, 58);
+  --color-overlay: rgba(0, 0, 0, 0.822);
+  --color-quit: rgba(5, 117, 117, 0.575);
+  --color-quit-hover: rgba(0, 3, 3, 0.789);
+
+  --field-border: 1px solid var(--color-text);
+  --field-size: 120px;
+}
+
 html, *, *::after, *::before {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  color: rgb(44, 44, 44);
+  color: var(--color-text);
   user-select: none;
   -webkit-user-select: none;
-  -webkit-user-select: none;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'VT323', 'Courier New', Courier, monospace;
   font-weight: 500;
-}
-
-:root {
-  --field-border: 1px solid rgb(44, 44, 44);
-  --field-size: 120px;
-  --bg-cyan-gradient: linear-gradient(to right, rgb(43, 240, 158), rgb(43, 201, 240));
 }
 
 body {
@@ -22,7 +35,7 @@ body {
   flex-flow: column wrap;
   align-items: center;
   justify-content: center;
-  background-color: rgb(32, 36, 36);
+  background-color: var(--color-bg);
 }
 
 .main-game {
@@ -31,8 +44,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgb(151, 43, 240);
-  background-image: linear-gradient(to right, rgb(43, 240, 158), rgb(43, 201, 240));
+  background-color: var(--color-win);
   padding: 10px;
   height: 600px;
   width: 600px;
@@ -51,7 +63,7 @@ body {
   padding: 5px;
   transition: all 500ms;
   border: 3px solid transparent;
-  box-shadow: 0 0 0 1px rgb(32, 36, 36);
+  box-shadow: 0 0 0 1px var(--color-bg);
   border-radius: 4px;
   width: 150px;
   text-align: center;
@@ -72,7 +84,7 @@ body {
 }
 
 .active {
-  border: 3px solid rgb(32, 36, 36);
+  border: 3px solid var(--color-bg);
 }
 
 .gameboard {
@@ -90,13 +102,14 @@ body {
   cursor: pointer;
   font-size: 64px;
   transition: background-color 1s ease;
+  border-color: rgba(0, 0, 0, 0.14);
 }
 
 .change-bg {
-  background-color: lightcoral;
+  background-color: var(--color-active);
 }
 
-.field:disabled{
+.field:disabled {
   color: inherit;
 }
 
@@ -109,18 +122,18 @@ body {
 }
 
 .win-box {
-  background-color: rgb(2, 199, 199);
+  background-color: var(--color-win);
 }
 
 .select-symbol {
-  background-color: rgb(2, 199, 199);
+  background-color: var(--color-win);
   height: 400px;
   width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 22px;
+  border-radius: 6px;
 }
 
 .select-txt {
@@ -129,11 +142,10 @@ body {
   font-weight: 700;
 }
 
-
 input[type="radio"] {
   visibility: hidden;
-  width: 0px;
-  height: 0px;
+  width: 0;
+  height: 0;
 }
 
 .radio-btn {
@@ -143,7 +155,7 @@ input[type="radio"] {
 }
 
 .symbol input[type="radio"]:checked + label {
-  background-color: lightcoral;
+  background-color: var(--color-active);
   color: #fff;
 }
 
@@ -152,9 +164,9 @@ input[type="radio"] {
   justify-content: center;
   align-items: center;
   height: 160px;
-  background-color: rgb(80, 79, 79);
+  background-color: var(--color-symbol-bg);
   width: 420px;
-  border-radius: 32px;
+  border-radius: 8px;
 }
 
 .symbol > div {
@@ -164,10 +176,9 @@ input[type="radio"] {
 .symbol label {
   font-size: 120px;
   border: none;
-  border-radius: 5px;
   height: 100%;
   width: 200px;
-  border-radius: 22px;
+  border-radius: 8px;
 }
 
 .difficulty {
@@ -177,13 +188,13 @@ input[type="radio"] {
 
 .difficulty .radio-btn {
   font-size: 18px;
-  background-color: #fff;
+  background-color: #fbf6f6;
   padding: 8px;
-  border-radius: 12px;
+  border-radius: 6px;
 }
 
 .difficulty input[type="radio"]:checked + label {
-  background-color: lightsalmon;
+  background-color: var(--color-active);
   color: #fff;
 }
 
@@ -192,11 +203,10 @@ input[type="radio"] {
   border-radius: 12px;
   border: 1px solid black;
   padding: 10px;
-  margin-top: 10px;
+  margin-top: 20px;
   background-color: transparent;
   color: black;
   cursor: pointer;
-  margin-top: 20px;
 }
 
 .gameboard-footer {
@@ -211,15 +221,10 @@ input[type="radio"] {
   max-width: 60px;
   width: 60px;
   text-align: center;
-  border: 2px solid black;
   position: relative;
   font-size: 18px;
   font-weight: 700;
-  background-color: rgb(86, 214, 214);
-  padding-top: 8px;
-  padding-bottom: 8px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  padding: 8px 0;
 }
 
 .score::before {
@@ -227,30 +232,19 @@ input[type="radio"] {
   max-width: 60px;
   width: 60px;
   text-align: center;
-  border: 2px solid black;
   position: absolute;
   right: -2px;
   top: -16px;
-  font-size: 12px;
+  font-size: 16px;
   border-bottom: none;
   font-weight: 700;
-  background-color: rgb(59, 58, 58);
-  color: white;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
 
-.score.x::before {
-  content: "x";
-}
-
-.score.o::before {
-  content: "o";
-}
-
-.score.tie::before {
-  content: "tie";
-}
+.score.x::before { content: "x"; }
+.score.o::before { content: "o"; }
+.score.tie::before { content: "tie"; }
 
 .overlay {
   position: fixed;
@@ -259,7 +253,7 @@ input[type="radio"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.822);
+  background-color: var(--color-overlay);
 }
 
 .gameover {
@@ -270,7 +264,7 @@ input[type="radio"] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 22px;
+  border-radius: 12px;
 }
 
 .gameover .message {
@@ -283,7 +277,7 @@ input[type="radio"] {
   border-radius: 6px;
   border: 1px solid darkgray;
   color: white;
-  background-color: rgb(78, 76, 76);
+  background-color: var(--color-symbol-bg);
 }
 
 .quit-game {
@@ -294,25 +288,13 @@ input[type="radio"] {
   border: none;
   font-size: 28px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: rgba(5, 117, 117, 0.575);
+  color: var(--color-quit);
   cursor: pointer;
+  transition: background-color 300ms ease;
 }
 
-.quit-game::after {
-  content: "Quit";
-  position: absolute;
-  font-size: 14px;
-  text-wrap: nowrap;
-  left: -12px;
-  bottom: -18px;
-  padding: 5px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  opacity: 0;
-  transition: all 300ms ease;
-}
-
-.quit-game:hover::after {
-  opacity: 1;
+.quit-game:hover {
+  color: var(--color-quit-hover);
 }
 
 .hide {
